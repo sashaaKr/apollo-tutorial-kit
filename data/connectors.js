@@ -2,6 +2,7 @@ import Sequelize from 'sequelize';
 import casual from 'casual';
 import _ from 'lodash';
 import Mongoose from 'mongoose';
+import fetch from 'node-fetch';
 
 const mongo = Mongoose.connect('mongodb://localhost/views');
 
@@ -55,4 +56,14 @@ db.sync({ force: true }).then(() => {
 const Author = db.models.author;
 const Post = db.models.post;
 
-export { Author, Post, View };
+const FortuneCookie = {
+  getOne() {
+    return fetch('http://fortunecookieapi.herokuapp.com/v1/cookie')
+      .then(res => res.json())
+      .then(res => {
+        return res[0].fortune.message;
+      });
+  },
+};
+
+export { Author, Post, View, FortuneCookie };
